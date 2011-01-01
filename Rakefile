@@ -15,9 +15,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "konnect"
   gem.homepage = "http://github.com/gcao/konnect"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "gcao@vonage.com"
+  gem.summary = %Q{A puzzle like game}
+  gem.description = %Q{A puzzle like game}
+  gem.email = "gcao99@gmail.com"
   gem.authors = ["Guoliang Cao"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
