@@ -1,12 +1,13 @@
 module Konnect
   class Game
-    attr_accessor :board_size
     attr :pairs
   
     def initialize board_size, pairs = nil
-      @board_size = board_size
       @board = Board.new board_size
-      @pairs = pairs
+      if pairs
+        @pairs = pairs
+        @board.fill_in_pairs pairs
+      end
     end
 
     def find_paths
@@ -35,6 +36,9 @@ module Konnect
         point2 = points[2*i + 1]
         @pairs << Pair.new(LABELS[i], point1[0], point1[1], point2[0], point2[1])
       end
+      
+      # Add to board
+      @board.fill_in_pairs @pairs
     end
 
   end

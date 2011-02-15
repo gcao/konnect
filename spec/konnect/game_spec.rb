@@ -1,10 +1,10 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Konnect" do
+describe Konnect::Game do
   it "should find paths for pairs" do
     game = Konnect::Game.new 6, [
-        Konnect::Pair.new('A', 1, 1, 3, 3),
-        Konnect::Pair.new('B', 2, 2, 4, 4)
+      Konnect::Pair.new('A', 1, 1, 3, 3),
+      Konnect::Pair.new('B', 2, 2, 4, 4)
     ]
 
     game.find_paths
