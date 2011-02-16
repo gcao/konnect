@@ -1,19 +1,27 @@
 module Konnect
   class Point
     attr :x, :y
-    attr_accessor :label, :part_of_path
+    attr_accessor :label, :first, :last
 
     def initialize x, y
       @x, @y = x, y
     end
-
-    def part_of_path?
-      @part_of_path
-    end
+    
+    def first?; @first; end
+    def last?; @last; end
 
     def reset
       @label = nil
-      @part_of_path = nil
+      @first = nil
+      @last = nil
+    end
+    
+    def neighbor_of? x, y
+      (@x - x).abs + (@y - y).abs == 1
+    end
+    
+    def neighbor_of_point? point
+      neighbor_of? point.x, point.y
     end
   end
 end
