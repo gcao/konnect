@@ -1,2 +1,2 @@
-class NoPathError < StandardError
+class Konnect::NoPathError < StandardError
 end
