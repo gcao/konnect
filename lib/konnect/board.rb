@@ -14,10 +14,9 @@ class Konnect::Board < Array
   end
 
   def fill_in_pairs pairs
-    # TODO reject pair of points which are neighbors
-    reset
-
     @pairs = pairs
+
+    reset
 
     pairs.each do |pair|
       from = self[pair.x1][pair.y1]
@@ -31,36 +30,46 @@ class Konnect::Board < Array
   end
 
   def find_paths
-    paths = []
     pair_index = 0
 
     while pair_index < @pairs.size
-      path = paths[pair_index]
+      pair = @pairs[pair_index]
+      path = pair.path
 
       begin
         if path
           path = find_next_path path
         else
-          pair = @pairs[pair_index]
           from = self[pair.x1][pair.y1]
           to = self[pair.x2][pair.y2]
 
           path = find_path from, to
         end
 
-        paths[pair_index] = path
+        pair.path = path
         pair_index += 1
       rescue Konnect::NoPathError
         if pair_index == 0
           raise
         else
-          paths[pair_index] = nil
+          pair.path = nil
           pair_index -= 1
         end
       end
     end
 
-    paths
+    @pairs.map{|pair| pair.path}
+  end
+
+  # Calculate paths in the reverse order, then return paths in the normal order
+  def find_alternative_paths
+    reset
+    
+    @pairs.reverse!
+    find_paths
+    @pairs.reverse!
+
+    @pairs.map{|pair| pair.path}
   end
 
   def find_path from, to
@@ -112,6 +121,8 @@ class Konnect::Board < Array
   end
 
   def reset
+    @pairs.each {|pair| pair.reset} if @pairs
+    
     size.times do |i|
       size.times do |j|
         self[i][j].reset
