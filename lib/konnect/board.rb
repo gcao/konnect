@@ -48,6 +48,7 @@ class Konnect::Board < Array
           path = find_path from, to
         end
 
+        paths[pair_index] = path
         pair_index += 1
       rescue Konnect::NoPathError
         if pair_index == 0
