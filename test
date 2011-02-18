@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# gem install ripl ripl-multi_line
+require 'ripl'
+require 'ripl/completion'
+require 'ripl/readline'
+require 'ripl/multi_line'
+
+# Skip loading ~/.irbrc
+Ripl.config[:irbrc] = false
+
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+require 'konnect'
+
+Ripl.start

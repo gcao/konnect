@@ -16,8 +16,12 @@ class Konnect::Point
     @last = nil
   end
 
+  def distance_to x, y
+    (@x - x).abs + (@y - y).abs
+  end
+
   def neighbor_of? x, y
-    (@x - x).abs + (@y - y).abs == 1
+    distance_to(x, y) == 1
   end
 
   def neighbor_of_point? point

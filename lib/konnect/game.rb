@@ -24,9 +24,9 @@ class Konnect::Game
 
         next if points.include?([x, y])
 
-        # Skip point which is neighbor of the first in the pair
         if i % 2 == 1
-          next if new Konnect::Point(x, y).neighbor_of?(*points[i - 1])
+          # Skip point whose distance from the first in the pair is less than 3
+          next if Konnect::Point.new(x, y).distance_to(*points[i - 1]) < 3
         end
         
         points << [x, y]
@@ -39,7 +39,7 @@ class Konnect::Game
     pairs_size.times do |i|
       point1 = points[2*i]
       point2 = points[2*i + 1]
-      pairs << Pair.new(LABELS[i], point1[0], point1[1], point2[0], point2[1])
+      pairs << Konnect::Pair.new(Konnect::LABELS[i], point1[0], point1[1], point2[0], point2[1])
     end
 
     new board_size, pairs
