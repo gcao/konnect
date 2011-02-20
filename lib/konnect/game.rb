@@ -1,4 +1,5 @@
 class Konnect::Game
+  attr :board
   attr :pairs
 
   def initialize board_size, pairs
