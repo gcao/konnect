@@ -1,14 +1,17 @@
 #!/usr/bin/env ruby
-# gem install ripl ripl-multi_line
+# gem install ripl ripl-multi_line awesome_print
 require 'ripl'
 require 'ripl/completion'
 require 'ripl/readline'
 require 'ripl/multi_line'
+require 'ap'
 
 # Skip loading ~/.irbrc
 Ripl.config[:irbrc] = false
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'konnect'
+
+include Konnect
 
 Ripl.start
