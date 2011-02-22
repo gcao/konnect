@@ -1,3 +1,6 @@
+# Shoes block's self is the shoes app object. It can not call methods defined outside.
+# Solution: set @gm to the instance of game manager and call @gm.draw_board.
+# Drawback: not very intuitive
 class Konnect::Shoes::GameManager
   attr :game
 
