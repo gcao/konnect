@@ -7,16 +7,14 @@ describe Konnect::Game do
       Konnect::Pair.new('B', 2, 2, 4, 4)
     ]
 
-    game.find_paths
+    solution = game.solve
 
-    path0 = game.pairs[0].path
-    path0.first.should == [1, 1]
-    path0.last.should == [3, 3]
+    path0 = solution.paths[0]
+    [path0.first.x, path0.first.y].should == [1, 1]
+    [path0.last.x, path0.last.y].should == [3, 3]
 
-    path1 = game.pairs[1].path
-    path1.first.should == [2, 2]
-    path1.last.should == [4, 4]
-
-    path0.has_common_point?(path1).should be_false
+    path1 = solution.paths[1]
+    [path1.first.x, path1.first.y].should == [2, 2]
+    [path1.last.y, path1.last.y].should == [4, 4]
   end
 end

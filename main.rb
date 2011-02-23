@@ -25,7 +25,16 @@ Shoes.app width: width, height: height do
 
     # Draw pairs
     game.pairs.each do |pair|
-      
+      stack left: pair.x1 * 60 + 25, top: pair.y1 * 60 + 25, width: 30, height: 30 do
+        fill rgb(0, 90, 0)
+        oval radius: 15
+        para pair.label, align: 'center'
+      end
+      stack left: pair.x2 * 60 + 25, top: pair.y2 * 60 + 25, width: 30, height: 30 do
+        fill rgb(0, 90, 0)
+        oval radius: 15
+        para pair.label, align: 'center'
+      end
     end
   end
 end
