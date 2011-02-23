@@ -14,4 +14,8 @@ require 'konnect'
 
 include Konnect
 
+def reload
+  load File.dirname(__FILE__) + '/lib/konnect.rb'
+end
+
 Ripl.start

@@ -188,4 +188,48 @@ class Konnect::Board < Array
 
     result
   end
+
+  def to_s
+    chars_at = lambda do |i, j|
+      point = self[i][j]
+
+      if not point.label.nil? and (point.first? or point.last?)
+        point.label
+      elsif i == 0
+        if j == 0
+          "\342\224\214"
+        elsif j == size - 1
+          "\342\224\254"
+        else
+          "\342\224\220"
+        end
+      elsif i == size - 1
+        if j == 0
+          "\342\224\234"
+        elsif j == size - 1
+          "\342\224\274"
+        else
+          "\342\224\244"
+        end
+      else
+        if j == 0
+          "\342\224\224"
+        elsif j == size - 1
+          "\342\224\264"
+        else
+          "\342\224\230"
+        end
+      end
+    end
+
+    s = "\n"
+    size.times do |i|
+      s << "  "
+      size.times do |j|
+        s << chars_at.call(i, j)
+      end
+      s << "\n"
+    end
+    s << "\n"
+  end
 end

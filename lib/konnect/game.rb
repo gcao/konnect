@@ -45,7 +45,7 @@ class Konnect::Game
       end
 
       # Skip if min path length == max path length
-      next if board_size * board_size == pairs.reduce(0){|pair, sum| sum + pair.min_path_length}
+      next if board_size * board_size == pairs.reduce(0){|sum, pair| sum + pair.min_path_length}
 
       game = new board_size, pairs
 
