@@ -1,3 +1,5 @@
+require 'pry'
+
 class Konnect::Board < Array
   EAST  = [1, 0]
   WEST  = [-1, 0]
@@ -52,6 +54,8 @@ class Konnect::Board < Array
         if pair_index == 0
           raise
         else
+          puts "---------------"
+          puts self.to_s
           pair.path = nil
           pair_index -= 1
         end
@@ -74,27 +78,28 @@ class Konnect::Board < Array
 
   def find_path from, to
     return [from, to] if from.neighbor_of_point? to
-
-    directions(from, to).each do |direction|
+#puts to_s
+#pry
+    Board.directions(from, to).each do |direction|
       new_from = find_point from, *direction
       next if new_from.nil?
       next unless valid_for_path? new_from, from.label
 
-      new_from.label = from.label # add to path
-      path = find_path new_from, to
-
-      if path.nil?
-        new_from.label = nil # remove from path
-        next
+      begin
+        new_from.label = from.label # add to path
+        path = find_path new_from, to
+        return [from, *path]
+      rescue Konnect::NoPathError
+        new_from.label = nil
       end
-
-      return [from, *path]
     end
 
     raise Konnect::NoPathError.new
   end
 
   def find_next_path path
+#puts to_s
+#pry
     to = path.pop
 
     while path.size >= 2
@@ -102,10 +107,15 @@ class Konnect::Board < Array
       tried.label = nil
 
       from = path.last
-      choices = directions(from, to).map{|xdiff, ydiff| find_point(from, xdiff, ydiff)}.compact
+      choices = Board.directions(from, to).map{|xdiff, ydiff| find_point(from, xdiff, ydiff)}.compact
 
       while tried != choices.last
         next_choice = choices[choices.index(tried) + 1]
+        unless valid_for_path? next_choice, to.label
+          tried = next_choice
+          next
+        end
+
         next_choice.label = to.label # add to path
 
         begin
@@ -117,6 +127,7 @@ class Konnect::Board < Array
       end
     end
 
+    puts self.to_s
     raise Konnect::NoPathError.new
   end
 
@@ -143,17 +154,20 @@ class Konnect::Board < Array
   def valid_for_path? point, label
     return false if point.label
 
-    [EAST, WEST, NORTH, SOUTH].detect do |xdiff, ydiff|
+    # Skip point which can be reached from 2 points in path.
+    i = 0
+    [EAST, WEST, NORTH, SOUTH].each do |xdiff, ydiff|
       neighbor = find_point point, xdiff, ydiff
-      neighbor and neighbor.label == point.label and not neighbor.last?
+      i += 1 if neighbor and neighbor.label == label and not neighbor.last?
     end
+    i == 1
   end
 
-  def neighbors point
-    [EAST, WEST, NORTH, SOUTH].map{ |xdiff, ydiff| find_point(point, xdiff, ydiff) }.compact
-  end
+  #def neighbors point
+  #  [EAST, WEST, NORTH, SOUTH].map{ |xdiff, ydiff| find_point(point, xdiff, ydiff) }.compact
+  #end
 
-  def directions point1, point2
+  def self.directions point1, point2
     result = []
 
     if point1.x > point2.x
@@ -190,34 +204,41 @@ class Konnect::Board < Array
   end
 
   def to_s
+    colors = %W(\033[31m \033[32m \033[33m \033[34m \033[35m \033[36m \033[37m)
+    black = "\033[0m"
     chars_at = lambda do |i, j|
       point = self[i][j]
 
-      if not point.label.nil? and (point.first? or point.last?)
-        point.label
+      if not point.label.nil? #and (point.first? or point.last?)
+        s = colors[point.label.bytes.first - "A".bytes.first]
+        s += "\033[1m"  # bold
+        s += "\033[4m" if point.first? # underline
+        s += "\033[7m" if point.last? # invert
+        s += point.label
+        s + black
       elsif i == 0
         if j == 0
           "\342\224\214"
         elsif j == size - 1
-          "\342\224\254"
-        else
           "\342\224\220"
+        else
+          "\342\224\254"
         end
       elsif i == size - 1
         if j == 0
-          "\342\224\234"
+          "\342\224\224"
         elsif j == size - 1
-          "\342\224\274"
+          "\342\224\230"
         else
-          "\342\224\244"
+          "\342\224\264"
         end
       else
         if j == 0
-          "\342\224\224"
+          "\342\224\234"
         elsif j == size - 1
-          "\342\224\264"
+          "\342\224\244"
         else
-          "\342\224\230"
+          "\342\224\274"
         end
       end
     end
@@ -226,7 +247,7 @@ class Konnect::Board < Array
     size.times do |i|
       s << "  "
       size.times do |j|
-        s << chars_at.call(i, j)
+        s << chars_at.call(i, j) << " "
       end
       s << "\n"
     end

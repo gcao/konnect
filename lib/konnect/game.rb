@@ -17,7 +17,7 @@ class Konnect::Game
   end
 
   def self.generate board_size, pairs_size
-    while true do
+    100.times do
       # Get 2 * pairs_size random points
       points = []
       (2 * pairs_size).times do |i|
