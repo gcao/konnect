@@ -1,2 +1,5 @@
+# rvm_trust_rvmrcs_flag=1  # What is this for? should it be put in .bash_profile?!
+rvm_gemset_create_on_use_flag=1
+
 rvm 1.9.2@konnect --create
 rvm wrapper 1.9.2@konnect textmate

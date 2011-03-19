@@ -16,8 +16,8 @@ class Konnect::Game
     @solution ||= Konnect::Solution.new self, @board.find_paths
   end
 
-  def self.generate board_size, pairs_size
-    100.times do
+  def self.generate board_size, pairs_size, complexity = 60
+    1000000.times do
       # Get 2 * pairs_size random points
       points = []
       (2 * pairs_size).times do |i|
@@ -51,7 +51,10 @@ class Konnect::Game
 
       begin
         solution = game.solve
-        if solution.complexity > 10
+        if solution.complexity >= complexity
+          puts "======================================="
+          puts game.board.to_s
+          puts "Complexity: #{solution.complexity}"
           return game
         else
           # Try again
@@ -60,6 +63,8 @@ class Konnect::Game
         # Try again
       end
     end
+
+    raise "No game is generated. Please try again."
   end
 
 end
